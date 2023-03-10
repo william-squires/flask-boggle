@@ -38,7 +38,7 @@ def score_word():
     print(game_id)
     print(games)
     game = games[game_id]
-    breakpoint()
+    # breakpoint()
 
     if not game.is_word_in_word_list(word):
         return jsonify(result="not-word")

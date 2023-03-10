@@ -40,13 +40,39 @@ class BoggleAppTestCase(TestCase):
             self.assertIsInstance(board, list)
             self.assertIn(gameId, games)
 
-    # def test_score_word(self):
-    #     """Test scoring word"""
+    def test_score_word(self):
+        """Test scoring word"""
 
-    #     with self.client as client:
-    #         response = client.post('/api/score-word', 
-    #                                json = {'gameId':})
+        with self.client as client:
 
+            # Make api request so we have a game to work with
+            new_game_response = client.post('/api/new-game')
+            j = new_game_response.get_json()
+            game_id = j["gameId"]
+            game = games[game_id]
+
+            # Set the game board to something fixed
+            game.board = [["C", "A", "T"], ["C", "A", "T"], ["C", "A", "T"]]
+
+            # Check for words in board
+            response = client.post('/api/score-word', 
+                                   json = {'gameId': game_id , "word" : "CAT"})
+            response_json = response.get_json()
+            self.assertEqual("ok", response_json['result'])
+
+
+            # Check for words not on board
+            response = client.post('/api/score-word', 
+                                   json = {'gameId': game_id , "word" : "DOG"})
+            response_json = response.get_json()
+            self.assertEqual("not-on-board", response_json['result'])
+
+
+            # Check for not word
+            response = client.post('/api/score-word', 
+                                   json = {'gameId': game_id , "word" : "TTT"})
+            response_json = response.get_json()
+            self.assertEqual("not-word", response_json['result'])
 
 
 
