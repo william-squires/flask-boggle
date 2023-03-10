@@ -6,6 +6,7 @@ from boggle import BoggleGame
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "this-is-secret"
 
+
 # The boggle games created, keyed by game id
 games = {}
 
@@ -26,4 +27,23 @@ def new_game():
     game = BoggleGame()
     games[game_id] = game
 
-    return {"gameId": "need-real-id", "board": "need-real-board"}
+    return jsonify(gameId= game_id, board = game.board)
+
+@app.post("/api/score-word")
+def score_word():
+    """accepts game id and word and checks if word is legal
+    returns JSON response"""
+    word = request.json["word"]
+    game_id = request.json["gameId"]
+    print(game_id)
+    print(games)
+    game = games[game_id]
+    breakpoint()
+
+    if not game.is_word_in_word_list(word):
+        return jsonify(result="not-word")
+    elif not game.check_word_on_board(word):
+        return jsonify(result = "not-on-board")
+    else:
+        return jsonify(result = "ok")
+    
