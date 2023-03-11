@@ -62,9 +62,12 @@ async function handleSubmitWord(evt) {
 }
 
 /** sends word to API to determine validity. 
- * Returns response from API */
+ * Returns string:
+ * if not a word -> "not-word"
+ * if not in board -> "not-in-board"
+ * if a word and in board -> "ok" */
 async function submitWord(word) {
-  const response = await axios.post("http://localhost:5000/api/score-word",
+  const response = await axios.post("/api/score-word",
     { gameId, word });
 
   return response.data.result;
