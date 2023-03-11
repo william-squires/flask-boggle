@@ -58,21 +58,21 @@ class BoggleAppTestCase(TestCase):
             response = client.post('/api/score-word', 
                                    json = {'gameId': game_id , "word" : "CAT"})
             response_json = response.get_json()
-            self.assertEqual("ok", response_json['result'])
-
+            self.assertEqual({"result" : "ok"}, response_json)
+            #easier to check if whole object is equal, also more complete an answer
 
             # Check for words not on board
             response = client.post('/api/score-word', 
                                    json = {'gameId': game_id , "word" : "DOG"})
             response_json = response.get_json()
-            self.assertEqual("not-on-board", response_json['result'])
+            self.assertEqual({"result" : "not-on-board"}, response_json)
 
 
             # Check for not word
             response = client.post('/api/score-word', 
                                    json = {'gameId': game_id , "word" : "TTT"})
             response_json = response.get_json()
-            self.assertEqual("not-word", response_json['result'])
+            self.assertEqual({"result" : "not-word"}, response_json)
 
 
 
